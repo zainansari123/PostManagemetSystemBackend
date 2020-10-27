@@ -70,15 +70,15 @@ class UserLoginSerializer(Serializer):
 
 
 class UpdateUserSerializer(ModelSerializer):
-    username = CharField(error_messages={"required":"username key is required","blank":"username is required"})
-    password = CharField(error_messages={"required":"password key is required","blank":"password is required"})
-    first_name = CharField(error_messages={"required":"first_name key is required","blank":"first_name is required"})
-    last_name = CharField(error_messages={"required":"last_name key is required","blank":"last_name is required"})
-    email = CharField(error_messages={"required":"email key is required","blank":"email is required"})
-    country_code = CharField(error_messages={"required":"country_code key is required","blank":"country_code is required"})
-    mobile = CharField(error_messages={"required":"mobile key is required","blank":"mobile is required"})
-    gender = CharField(error_messages={"required":"gender key is required","blank":"gender is required"})
-    profile_img = ImageField(error_messages={"required":"profile_img key is required","blank":"please upload profile image"})
+    # username = CharField(error_messages={"required":"username key is required","blank":"username is required"})
+    # password = CharField(error_messages={"required":"password key is required","blank":"password is required"})
+    # first_name = CharField(error_messages={"required":"first_name key is required","blank":"first_name is required"})
+    # last_name = CharField(error_messages={"required":"last_name key is required","blank":"last_name is required"})
+    # email = CharField(error_messages={"required":"email key is required","blank":"email is required"})
+    # country_code = CharField(error_messages={"required":"country_code key is required","blank":"country_code is required"})
+    # mobile = CharField(error_messages={"required":"mobile key is required","blank":"mobile is required"})
+    # gender = CharField(error_messages={"required":"gender key is required","blank":"gender is required"})
+    # profile_img = ImageField(error_messages={"required":"profile_img key is required","blank":"please upload profile image"})
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)

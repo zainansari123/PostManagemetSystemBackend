@@ -12,50 +12,28 @@ from pytz import timezone
 # from account.models import Driver
 
 
-class UserLoginApiView(CreateAPIView):
-    permission_classes = [AllowAny]
-    queryset = User.objects.all()
-    serializer_class = UserLoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, context={'request': request})
-        # data = serializer.data
-        if serializer.is_valid():
-            # serializer.save()
-            return Response({
-                'data':serializer.data,
-                "message": "Login successfully"
-            }, status=HTTP_200_OK)
-        error_keys = list(serializer.errors.keys())
-        print(error_keys)
-        if error_keys:
-            error_msg = serializer.errors[error_keys[0]]
-            return Response({'message': error_msg[0]}, status=400)
-        return Response(serializer.errors, status=400)
-
-
-class UserApiView(CreateAPIView):
+class TaskApiView(CreateAPIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, *args, **kwargs):
         qs = User.objects.all()
-        data = UserSerializer(qs, many=True).data
+        data = TaskSerializer(qs, many=True).data
         return Response({"message":"Promo code list","data":data},status=HTTP_200_OK)
 
     def put(self, request, pk):
         print(pk)
-        saved_promo = get_object_or_404(User.objects.all(), pk=pk)
+        task = get_object_or_404(TaskWork.objects.all(), pk=pk)
         data = request.data
-        serializer = UserSerializer(instance=saved_promo, data=data, partial=True)
+        serializer = EntryUpdateSerializer(instance=task, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
-            user_saved = serializer.save()
-        return Response({"success": "User '{}' updated successfully".format(user_saved.username)})
+            serializer.save()
+        return Response({"success": "Task updated successfully"},status=HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        serializer = CreateUserSerializer(data=request.data)
+        serializer = CreateTaskSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message":"User {} created successfully".format(serializer.data.get('username')),"data":serializer.data},status=HTTP_200_OK)
+            return Response({"message":"Task created successfully","data":serializer.data},status=HTTP_200_OK)
         # print(serializer)
         error_keys = list(serializer.errors.keys())
         print(error_keys)
