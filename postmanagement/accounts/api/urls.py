@@ -8,4 +8,5 @@ urlpatterns = [
     path('create_user', UserApiView.as_view(), name="create_user"),
     path('edit_user/<int:pk>', UserApiView.as_view(), name="edit_user"),
     path('user_list', UserApiView.as_view(), name="user_list"),
+    path('block_unblock_user/<int:pk>', BlockUnblockUserApiView.as_view(), name="block_unblock_user"),
 ]

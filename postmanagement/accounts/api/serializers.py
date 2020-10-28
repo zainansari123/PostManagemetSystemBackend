@@ -16,9 +16,16 @@ from datetime import date, datetime
 
 
 class UserSerializer(ModelSerializer):
+    profile_img=SerializerMethodField()
+
+    def get_profile_img(self, instance):
+        try:
+            return instance.profile_img.url
+        except:
+            return ""
     class Meta:
         model = User
-        fields='__all__'
+        fields=['id','email','first_name','last_name','profile_img','country_code','mobile','username','gender','address','is_active']
 
 
 class UserLoginSerializer(Serializer):
@@ -42,6 +49,8 @@ class UserLoginSerializer(Serializer):
         if usertype not in ('1','2'):
             raise ValidationError('please Enter Valid User type')
         if username:
+            print(usertype)
+            print('================')
             if usertype=='1':
                 qs = User.objects.filter(username=username,is_superuser=True)
             if usertype=='2':
@@ -107,6 +116,7 @@ class CreateUserSerializer(Serializer):
         error_messages={"required": "country_code key is required", "blank": "country_code is required"})
     mobile = CharField(error_messages={"required": "mobile key is required", "blank": "mobile is required"})
     gender = CharField(error_messages={"required": "gender key is required", "blank": "gender is required"})
+    address = CharField(error_messages={"required": "address key is required", "blank": "address is required"})
     profile_img = ImageField(error_messages={"required": "profile_img key is required", "blank": "please upload profile image"})
     token=CharField(read_only=True)
 
@@ -123,7 +133,7 @@ class CreateUserSerializer(Serializer):
         if username:
             user = User(username=username,first_name=validated_data['first_name'],last_name=validated_data['last_name'],
                         email=validated_data['email'],country_code=validated_data['country_code'],
-                        mobile=validated_data['mobile'],gender=validated_data['gender'],profile_img=validated_data.get('profile_img'))
+                        mobile=validated_data['mobile'],gender=validated_data['gender'],address=validated_data['address'],profile_img=validated_data.get('profile_img'))
             user.set_password(validated_data['password'])
             user.save()
             payload = jwt_payload_handler(user)

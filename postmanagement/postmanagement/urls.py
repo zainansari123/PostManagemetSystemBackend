@@ -15,9 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/api/', include('accounts.api.urls', namespace='accounts_api')),
     path('tasks/api/', include('post_management.api.urls', namespace='task_api'))
 ]
+from postmanagement.settings import *
+
+if DEBUG:
+    # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+
